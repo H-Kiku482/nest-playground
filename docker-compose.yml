@@ -1,0 +1,32 @@
+version: '3'
+services:
+  frontend:
+    image: node:16
+    working_dir: /usr/src/app
+    ports:
+      - 80:3000
+    volumes:
+      - ./frontend/:/usr/src/app/
+    command: sh -c 'yarn install && yarn dev'
+
+  backend:
+    image: node:16
+    working_dir: /usr/src/app
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/usr/src/app
+    command: bash -c 'yarn run start'
+
+  database:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database/my.conf:/etc/mysql/conf.d/my.conf
+      - ./database/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: test_database
+      TZ: Asia/Tokyo
+
